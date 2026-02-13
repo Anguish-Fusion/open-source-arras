@@ -2062,7 +2062,7 @@ const hexDreadNames = {
 	Arbitrator: {
 		Arbitrator: 'Arbitrator II',
 		Retardant: 'Extinguisher',
-		Tyrant: 'Shogun',
+		Tyrant: 'Shogunate',
 		Raider: 'Buccaneer',
 		Gladiator: 'Warrior',
 		Cerberus: 'Gorgon',
