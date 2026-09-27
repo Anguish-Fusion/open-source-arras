@@ -1,7 +1,7 @@
 let crypto = require("crypto"),
     net = require("net"),
     fs = require("fs");
-PERMABAN_FILE = "./permanentBans.json";
+PERMABAN_FILE = "./server/permanentBans.json";
 let bans = global.bans || (global.bans = []);
 let permBans = global.permBans || (global.permBans = []);
 global.chatID = 0;
@@ -58,7 +58,7 @@ class socketManager {
     };
     ban(socket, reason) {
         let time = Date.now();
-        util.warn((reason || "No reason given.") + " Banning.");
+        util.warn((reason || "No reason given.") + " Temporarily banning.");
 
         let s = this.clients.filter((c) => c.ip === socket.ip);
 
@@ -85,7 +85,7 @@ class socketManager {
 
     permaban(socket, reason) {
         let time = Date.now();
-        util.warn((reason || "No reason given.") + " Permanent Banning.");
+        util.warn((reason || "No reason given.") + " Permanently banning.");
 
         let s = this.clients.filter((c) => c.ip === socket.ip);
         for (let i = 0; i < s.length; i++) {
@@ -255,19 +255,19 @@ class socketManager {
                 }
                 if (global.gameManager.private && !socket.permissions) {
                     return (
-                        socket.talk("message", "This server seems to be private."),
-                        socket.kick("Tried to join private server without valid token.")
+                        socket.talk("message", "This server seems to be private.");
+                        socket.kick("Tried to join private server without valid token.");
                     ) 
                 }
                 if (!global.gameManager.webProperties.maxPlayers < 1 && this.clients.length > global.gameManager.webProperties.maxPlayers) {
                     return (
-                        socket.talk("message", "This server is full, please rejoin later."),
-                        socket.kick("Server full.")
+                        socket.talk("message", "This server is full, please rejoin later.");
+                        socket.kick("Server full.");
                     ) 
                 }
                 let b = bans.find((ban) => ban.ip === socket.ip);
                 if (b) {
-                    socket.talk(b.reason === "Ban Hammer" ? "moderatorban" : "temporaryban"); // Important, kick the user after calling temporaryban in order to see the ban message.
+                    socket.talk(b.reason === "Ban Hammer" ? "moderatorBan" : "temporaryBan");
                     socket.kick("Temporarily banned player detected!");
                     return 1;
                 }
@@ -276,7 +276,7 @@ class socketManager {
                 );
                 if (permB) {
                     socket.talk("permanentban");
-                    socket.permaban("Permanently banned player found!");
+                    socket.permaban("Permanently banned player detected!");
                     return 1;
                 }
                 // Get data
@@ -2450,7 +2450,7 @@ class socketManager {
             if (fs.existsSync(PERMABAN_FILE)) {
                 permBans = JSON.parse(fs.readFileSync(PERMABAN_FILE));
                 if (permBans.some(b => b.ip === socket.ip)) {
-                    socket.talk("permanentban");
+                    socket.talk("permanentBan");
                     socket.kick("Permanent Banned player found!");
                     return;
                 }
