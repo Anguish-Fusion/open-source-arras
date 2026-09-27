@@ -586,15 +586,20 @@ Class.banHammer = {
         {
             event: "control",
             handler: ({body}) => {
-                const s = body.store;
-                const e = s.selectedEntity
-                if (!e || !e.isPlayer || !e.socket) return;
-                if (e.socket.status.operatorLevel >= 4) {
+                const selected = body.store.selectedEntity
+                if (!selected || !selected.isPlayer || !selected.socket) return;
+                if (selected.socket.status.opera >= 4) {
                     body.sendMessage("You cannot ban this player!");
                     return;
                 }
-                global.gameManager.socketManager.ban(e.socket, "Ban Hammer");
-                body.sendMessage("Banned the selected player.");
+                let type = body.store.banCommandType ?? 1;
+                if (type === 1) {
+                    global.gameManager.socketManager.ban(selected.socket, "Ban Hammer");
+                    body.sendMessage("Banned the selected player.");
+                } else {
+                    global.gameManager.socketManager.permaban(selected.socket, "Ban Hammer");
+                    body.sendMessage("Permanently banned the selected player.");
+                }
             }
         }
     ]

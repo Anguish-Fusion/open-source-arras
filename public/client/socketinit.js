@@ -1052,6 +1052,9 @@ let incoming = async function(message, socket) {
             case "permanentBan": {
                 global.message = "You have been permanently banned from the game.";
             } break;
+            case "permaModBan": {
+                global.message = "You have been permanently banned by a game moderator.";
+            } break;
             case "svInfo": {
                 // For debugging.
                 global.serverStats.serverGamemodeName = m[0];
