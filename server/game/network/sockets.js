@@ -256,13 +256,13 @@ class socketManager {
                 if (global.gameManager.private && !socket.permissions) {
                     return (
                         socket.talk("message", "This server seems to be private."),
-                        socket.kick("Tried to join private server without valid token.");
+                        socket.kick("Tried to join private server without valid token.")
                     ) 
                 }
                 if (!global.gameManager.webProperties.maxPlayers < 1 && this.clients.length > global.gameManager.webProperties.maxPlayers) {
                     return (
                         socket.talk("message", "This server is full, please rejoin later."),
-                        socket.kick("Server full.");
+                        socket.kick("Server full.")
                     ) 
                 }
                 let b = bans.find((ban) => ban.ip === socket.ip);
