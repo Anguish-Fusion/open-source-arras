@@ -267,7 +267,7 @@ class socketManager {
                 }
                 let b = bans.find((ban) => ban.ip === socket.ip);
                 if (b) {
-                    socket.talk(b.reason === "Ban Hammer" ? "moderatorBan" : "temporaryBan");
+                    socket.talk(b.reason === "Ban Hammer" ? "tempModBan" : "temporaryBan");
                     socket.kick("Temporarily banned player detected!");
                     return 1;
                 }
