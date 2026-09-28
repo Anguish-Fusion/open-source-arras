@@ -1,4 +1,4 @@
-const { combineStats, LayeredBoss, makeAura, makeMenu, makeRadialAuto, weaponArray, weaponMirror, weaponStack } = require("../facilitators.js");
+const { combineStats, LayeredBoss, makeAura, makeMenu, makeRadialAuto, weaponArray, weaponMirror, weaponStack, getStatFrom } = require("../facilitators.js");
 const { base, statnames } = require("../constants.js");
 const g = require("../gunvals.js");
 
@@ -36,7 +36,8 @@ Class.menu_testing = makeMenu("Testing", {upgrades: [
     "syncWithTankTest",
     "airblast",
     "anglemancer",
-    "backwardsExports"
+    "backwardsExports",
+    "overrideTest"
 ], tooltip: "A large selection of tanks that use many of the features of Open Source Arras.\n" + "WARNING: There are a lot of entities in here and having this menu open may cause noticeable frame drops!"})
 
 const tessFaceColors = Array.from({ length: 20 }, (_, i) =>
@@ -1046,8 +1047,6 @@ Class.ghoster = {
                 setTimeout(() => {
                     body.SPEED = 1e-99
                     body.ACCEL = 1e-99
-                    body.FOV *= 2
-                    body.alpha = 1
                 }, 2000)
                 setTimeout(() => {
                     body.SPEED = base.SPEED
@@ -1316,6 +1315,36 @@ testLayeredBoss.addLayer({turret: {
     POSITION: [10, 7.5, 0, null, 160, 0],
     TYPE: "crowbarTurret"
 }}, true)
+Class.overrideTest = {
+    PARENT: "genericTank",
+    LABEL: "Stat Override Test",
+    DANGER: 7,
+    GUNS: [
+        {
+            POSITION: {
+                LENGTH: 20.5,
+                WIDTH: 19.5
+            },
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.destroyer, g.annihilator]),
+                TYPE: "bullet",
+                STAT_OVERRIDE: getStatFrom([g.basic], ["reload", "speed", "shudder", "spray", "maxSpeed"])
+            }
+        },
+        {
+            POSITION: {
+                LENGTH: 23,
+                WIDTH: 8,
+                DELAY: 0.5
+            },
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic]),
+                TYPE: "bullet",
+                STAT_OVERRIDE: getStatFrom([g.basic], ["reload", "speed", "shudder", "spray", "maxSpeed"])
+            }
+        }
+    ]
+};
 
 // DigDig (WIP)
 Class.genericDigDig = {
